@@ -112,4 +112,3 @@ def run_secure_review(target_path: str, skip_secrets: bool, ruleset: str, llm_pr
 
 def stop_scan():
     return stop_semgrep()
-
