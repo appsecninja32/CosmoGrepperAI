@@ -45,7 +45,7 @@ CosmoGrepperAI wraps the Semgrep engine in a dedicated intelligence layer:
 *   **Python 3.9+**
 *   **Semgrep Engine**: 
     - **Windows**: [Install Semgrep via Pip](https://semgrep.dev/docs/getting-started/) or download the binary.
-    - **macOS**: `brew install semgrep`
+    - **macOS**: `brew install semgrep`. Special note for fpdf pip install is recommended. 
 
 #### 2. Bootstrap the Environment
 ```bash
