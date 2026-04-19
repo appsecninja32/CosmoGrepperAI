@@ -1,0 +1,78 @@
+rules:
+  - id: owasp-json-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [json]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              "password": $VAL
+          - pattern: |
+              "secret": $VAL
+          - pattern: |
+              "api_key": $VAL
+          - pattern: |
+              "token": $VAL
+          - pattern: |
+              "auth": $VAL
+          - pattern: |
+              "jwt": $VAL
+
+  - id: owasp-json-insecure-http-url
+    message: "Insecure HTTP URL found in JSON"
+    severity: WARNING
+    languages: [json]
+    pattern: |
+      "http://$X"
+
+  - id: owasp-json-debug-flag
+    message: "Debug flag enabled in JSON configuration"
+    severity: WARNING
+    languages: [json]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              "debug": true
+          - pattern: |
+              "logLevel": "debug"
+
+  - id: owasp-json-excessive-permissions
+    message: "JSON configuration grants excessive permissions"
+    severity: WARNING
+    languages: [json]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              "permissions": ["*"]
+          - pattern: |
+              "scopes": ["*"]
+
+  - id: owasp-json-hardcoded-connection-string
+    message: "Hardcoded database connection string"
+    severity: ERROR
+    languages: [json]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              "connectionString": $VAL
+          - pattern: |
+              "db_url": $VAL
+          - pattern: |
+              "database": {
+                "url": $VAL
+              }
+
+  - id: owasp-json-weak-crypto-config
+    message: "Weak or insecure cryptographic configuration"
+    severity: WARNING
+    languages: [json]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              "algorithm": "md5"
+          - pattern: |
+              "algorithm": "sha1"
+          - pattern: |
+              "hash": "md5"
+          - pattern: |
+              "hash": "sha1"

@@ -1,0 +1,79 @@
+rules:
+  - id: owasp-lisp-eval
+    message: "Use of eval can lead to arbitrary code execution"
+    severity: ERROR
+    languages: [lisp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              (eval $X)
+          - pattern: |
+              (funcall (eval $X))
+
+  - id: owasp-lisp-shell-command
+    message: "Shell command execution with dynamic input"
+    severity: ERROR
+    languages: [lisp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              (uiop:run-program $CMD)
+          - pattern: |
+              (sb-ext:run-program $CMD)
+          - pattern: |
+              (run-program $CMD)
+
+  - id: owasp-lisp-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [lisp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              (defparameter $VAR "SECRET")
+          - pattern: |
+              (defparameter $VAR "PASSWORD")
+          - pattern: |
+              (defparameter $VAR "API_KEY")
+          - pattern: |
+              (defparameter $VAR "TOKEN")
+
+  - id: owasp-lisp-weak-hash
+    message: "Use of weak hash function (MD5/SHA1)"
+    severity: WARNING
+    languages: [lisp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              (md5:md5sum-string $X)
+          - pattern: |
+              (ironclad:digest-sequence :md5 $X)
+          - pattern: |
+              (ironclad:digest-sequence :sha1 $X)
+
+  - id: owasp-lisp-debug-print
+    message: "Debug logging left enabled"
+    severity: WARNING
+    languages: [lisp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              (format t "DEBUG: ~A" $X)
+          - pattern: |
+              (print "DEBUG")
+          - pattern: |
+              (format t "debug: ~A" $X)
+
+  - id: owasp-lisp-insecure-http
+    message: "Insecure HTTP URL used instead of HTTPS"
+    severity: WARNING
+    languages: [lisp]
+    pattern: |
+      "http://"
+
+  - id: owasp-lisp-dangerous-read-from-string
+    message: "read-from-string can be abused for code injection"
+    severity: ERROR
+    languages: [lisp]
+    pattern: |
+      (read-from-string $X)

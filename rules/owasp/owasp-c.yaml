@@ -1,0 +1,26 @@
+rules:
+  - id: owasp-c-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [c]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              char $VAR[] = "SECRET";
+          - pattern: |
+              char $VAR[] = "PASSWORD";
+          - pattern: |
+              char $VAR[] = "API_KEY";
+          - pattern: |
+              char $VAR[] = "TOKEN";
+
+  - id: owasp-c-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [c]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              system($CMD);
+          - pattern: |
+              execl("/bin/sh", "sh", "-c", $CMD, NULL);

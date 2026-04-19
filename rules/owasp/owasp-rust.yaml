@@ -1,0 +1,26 @@
+rules:
+  - id: owasp-rust-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [rust]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              std::process::Command::new("sh").arg("-c").arg($CMD)
+          - pattern: |
+              Command::new("sh").arg("-c").arg($CMD)
+
+  - id: owasp-rust-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [rust]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              let $VAR = "SECRET";
+          - pattern: |
+              let $VAR = "PASSWORD";
+          - pattern: |
+              let $VAR = "API_KEY";
+          - pattern: |
+              let $VAR = "TOKEN";

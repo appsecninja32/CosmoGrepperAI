@@ -1,0 +1,42 @@
+{
+    "rules": [
+        {
+            "id": "gg-generic-hardcoded-secret",
+            "description": "Possible hardcoded secret or credential",
+            "severity": 5,
+            "patterns": [
+                "api[_-]?key\\s*[:=]\\s*['\\\"][A-Za-z0-9_\\-]{16,}['\\\"]",
+                "secret\\s*[:=]\\s*['\\\"][^'\\\"]{8,}['\\\"]",
+                "password\\s*[:=]\\s*['\\\"][^'\\\"]{6,}['\\\"]"
+            ]
+        },
+        {
+            "id": "gg-generic-debug-logging",
+            "description": "Debug logging left enabled",
+            "severity": 2,
+            "patterns": [
+                "console\\.log\\(",
+                "print\\(\"DEBUG",
+                "logger\\.debug\\(",
+                "DEBUG\\s*=\\s*True"
+            ]
+        },
+        {
+            "id": "gg-generic-todo-fixme",
+            "description": "TODO/FIXME left in code",
+            "severity": 1,
+            "patterns": [
+                "TODO",
+                "FIXME"
+            ]
+        },
+        {
+            "id": "gg-generic-unsafe-http",
+            "description": "Use of plain HTTP URL (possible insecure transport)",
+            "severity": 3,
+            "patterns": [
+                "http://[A-Za-z0-9\\./_-]+"
+            ]
+        }
+    ]
+}

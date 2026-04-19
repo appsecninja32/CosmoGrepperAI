@@ -1,0 +1,7 @@
+rules:
+  - id: python-eval-detected
+    patterns:
+      - pattern: eval($X)
+    message: "Use of eval() detected"
+    severity: ERROR
+    languages: [python]

@@ -1,0 +1,41 @@
+rules:
+  - id: owasp-bash-command-injection
+    message: "Possible command injection via unquoted variable"
+    severity: ERROR
+    languages: [bash]
+    patterns:
+      - pattern-either:
+          - pattern: $CMD $VAR
+          - pattern: $CMD "$VAR" $X
+
+  - id: owasp-bash-eval
+    message: "Use of eval can lead to code injection"
+    severity: ERROR
+    languages: [bash]
+    patterns:
+      - pattern: eval $X
+
+  - id: owasp-bash-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [bash]
+    patterns:
+      - pattern-either:
+          - pattern: SECRET="*"
+          - pattern: PASSWORD="*"
+          - pattern: API_KEY="*"
+          - pattern: TOKEN="*"
+
+  - id: owasp-bash-unsafe-curl
+    message: "curl without TLS verification"
+    severity: WARNING
+    languages: [bash]
+    patterns:
+      - pattern: curl -k $X
+
+  - id: owasp-bash-debug
+    message: "Debug mode enabled"
+    severity: WARNING
+    languages: [bash]
+    patterns:
+      - pattern: set -x

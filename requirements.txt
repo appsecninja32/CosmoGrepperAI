@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+semgrep
+google-genai
+requests
+detect-secrets

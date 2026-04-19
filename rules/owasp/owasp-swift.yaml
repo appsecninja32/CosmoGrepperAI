@@ -1,0 +1,47 @@
+rules:
+  - id: owasp-swift-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [swift]
+    patterns:
+      - pattern-either:
+          - pattern: "db.execute($QUERY + $X)"
+          - pattern: "db.query($QUERY + $X)"
+
+  - id: owasp-swift-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [swift]
+    patterns:
+      - pattern-either:
+          - pattern: "Process.launchedProcess(launchPath: $CMD, ...)"
+          - pattern: "Process.init(launchPath: $CMD, ...)"
+
+  - id: owasp-swift-weak-hash
+    message: "Use of weak hash function (MD5/SHA1)"
+    severity: WARNING
+    languages: [swift]
+    patterns:
+      - pattern-either:
+          - pattern: "CC_MD5($X, ...)"
+          - pattern: "CC_SHA1($X, ...)"
+
+  - id: owasp-swift-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [swift]
+    patterns:
+      - pattern-either:
+          - pattern: "let $VAR = \"SECRET\""
+          - pattern: "let $VAR = \"PASSWORD\""
+          - pattern: "let $VAR = \"API_KEY\""
+          - pattern: "let $VAR = \"TOKEN\""
+
+  - id: owasp-swift-debug-logging
+    message: "Debug logging left enabled"
+    severity: WARNING
+    languages: [swift]
+    patterns:
+      - pattern-either:
+          - pattern: "print(\"DEBUG\" ...)"
+          - pattern: "NSLog(\"DEBUG\" ...)"

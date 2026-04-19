@@ -1,0 +1,81 @@
+rules:
+  - id: owasp-lua-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [lua]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $QUERY .. $X
+          - pattern: |
+              db:execute($QUERY .. $X)
+          - pattern: |
+              db:query($QUERY .. $X)
+
+  - id: owasp-lua-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [lua]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              os.execute($CMD)
+          - pattern: |
+              io.popen($CMD)
+
+  - id: owasp-lua-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [lua]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $VAR = "SECRET"
+          - pattern: |
+              $VAR = "PASSWORD"
+          - pattern: |
+              $VAR = "API_KEY"
+          - pattern: |
+              $VAR = "TOKEN"
+
+  - id: owasp-lua-weak-hash
+    message: "Use of weak hash function (MD5/SHA1)"
+    severity: WARNING
+    languages: [lua]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              md5.sumhexa($X)
+          - pattern: |
+              sha1($X)
+
+  - id: owasp-lua-debug-print
+    message: "Debug logging left enabled"
+    severity: WARNING
+    languages: [lua]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              print("DEBUG")
+          - pattern: |
+              print("debug")
+          - pattern: |
+              ngx.log(ngx.DEBUG, $X)
+
+  - id: owasp-lua-insecure-http
+    message: "Insecure HTTP URL used instead of HTTPS"
+    severity: WARNING
+    languages: [lua]
+    pattern: |
+      "http://"
+
+  - id: owasp-lua-dangerous-loadstring
+    message: "Use of loadstring() can lead to code execution vulnerabilities"
+    severity: ERROR
+    languages: [lua]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              loadstring($X)
+          - pattern: |
+              load($X)

@@ -1,0 +1,51 @@
+rules:
+  - id: owasp-ts-hardcoded-secret
+    message: Possible hardcoded secret or credential
+    severity: WARNING
+    languages: [typescript]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              const $VAR = "SECRET"
+          - pattern: |
+              const $VAR = "PASSWORD"
+          - pattern: |
+              const $VAR = "API_KEY"
+          - pattern: |
+              const $VAR = "TOKEN"
+
+  - id: owasp-ts-debug-logging
+    message: Debug logging left enabled in production code
+    severity: WARNING
+    languages: [typescript]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              console.log("DEBUG", ...)
+          - pattern: |
+              console.debug(...)
+
+  - id: owasp-ts-insecure-http
+    message: Insecure HTTP URL used instead of HTTPS
+    severity: WARNING
+    languages: [typescript]
+    pattern: |
+      "http://"
+
+  - id: owasp-ts-dangerous-eval
+    message: Use of eval or Function constructor
+    severity: ERROR
+    languages: [typescript]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              eval($X)
+          - pattern: |
+              new Function($X)
+
+  - id: owasp-ts-dom-innerhtml
+    message: Assignment to innerHTML can lead to XSS
+    severity: ERROR
+    languages: [typescript]
+    pattern: |
+      $EL.innerHTML = $X

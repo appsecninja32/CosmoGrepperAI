@@ -1,0 +1,28 @@
+rules:
+  - id: owasp-bash-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [bash]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              eval $CMD
+          - pattern: |
+              bash -c $CMD
+          - pattern: |
+              sh -c $CMD
+
+  - id: owasp-bash-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [bash]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              SECRET="*"
+          - pattern: |
+              PASSWORD="*"
+          - pattern: |
+              API_KEY="*"
+          - pattern: |
+              TOKEN="*"

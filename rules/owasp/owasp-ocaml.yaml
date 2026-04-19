@@ -1,0 +1,59 @@
+rules:
+  - id: owasp-ocaml-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [ocaml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $QUERY ^ $X
+          - pattern: |
+              $QUERY ^ "SELECT" ^ $X
+
+  - id: owasp-ocaml-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [ocaml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              Unix.system($CMD)
+          - pattern: |
+              Sys.command($CMD)
+
+  - id: owasp-ocaml-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [ocaml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              let $VAR = "SECRET"
+          - pattern: |
+              let $VAR = "PASSWORD"
+          - pattern: |
+              let $VAR = "API_KEY"
+          - pattern: |
+              let $VAR = "TOKEN"
+
+  - id: owasp-ocaml-weak-hash
+    message: "Use of weak hash function (MD5/SHA1)"
+    severity: WARNING
+    languages: [ocaml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              Md5.string($X)
+          - pattern: |
+              Sha1.string($X)
+
+  - id: owasp-ocaml-debug-print
+    message: "Debug logging left enabled"
+    severity: WARNING
+    languages: [ocaml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              print_endline "DEBUG"
+          - pattern: |
+              Printf.printf "DEBUG"

@@ -1,0 +1,87 @@
+rules:
+  - id: owasp-julia-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [julia]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $QUERY * $X
+          - pattern: |
+              string($QUERY, $X)
+          - pattern: |
+              DBInterface.execute($CONN, string($QUERY, $X))
+
+  - id: owasp-julia-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [julia]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              run(`$CMD`)
+          - pattern: |
+              read(`$CMD`, String)
+          - pattern: |
+              pipeline(`$CMD`)
+
+  - id: owasp-julia-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [julia]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $VAR = "SECRET"
+          - pattern: |
+              $VAR = "PASSWORD"
+          - pattern: |
+              $VAR = "API_KEY"
+          - pattern: |
+              $VAR = "TOKEN"
+
+  - id: owasp-julia-weak-hash
+    message: "Use of weak hash function (MD5/SHA1)"
+    severity: WARNING
+    languages: [julia]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              md5($X)
+          - pattern: |
+              sha1($X)
+          - pattern: |
+              digest($X, "md5")
+          - pattern: |
+              digest($X, "sha1")
+
+  - id: owasp-julia-debug-print
+    message: "Debug logging left enabled"
+    severity: WARNING
+    languages: [julia]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              println("DEBUG")
+          - pattern: |
+              @info "DEBUG" $X
+          - pattern: |
+              @debug $X
+
+  - id: owasp-julia-insecure-http
+    message: "Insecure HTTP URL used instead of HTTPS"
+    severity: WARNING
+    languages: [julia]
+    pattern: |
+      "http://"
+
+  - id: owasp-julia-dangerous-eval
+    message: "Use of eval() can lead to code execution vulnerabilities"
+    severity: ERROR
+    languages: [julia]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              eval($X)
+          - pattern: |
+              Meta.parse($X)

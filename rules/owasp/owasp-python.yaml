@@ -1,0 +1,43 @@
+rules:
+  - id: owasp-python-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [python]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              cursor.execute($QUERY + $X)
+          - pattern: |
+              cursor.execute($QUERY % $X)
+          - pattern: |
+              cursor.execute($QUERY.format($X))
+          - pattern: |
+              cursor.execute(f"{ $X }")
+
+  - id: owasp-python-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [python]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              os.system($CMD)
+          - pattern: |
+              subprocess.Popen($CMD, shell=True, ...)
+          - pattern: |
+              subprocess.run($CMD, shell=True, ...)
+
+  - id: owasp-python-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [python]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $VAR = "SECRET"
+          - pattern: |
+              $VAR = "PASSWORD"
+          - pattern: |
+              $VAR = "API_KEY"
+          - pattern: |
+              $VAR = "TOKEN"

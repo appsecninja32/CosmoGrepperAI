@@ -1,0 +1,79 @@
+rules:
+  - id: offline-python-sql-injection
+    patterns:
+      - pattern-either:
+          - pattern: cursor.execute(..., $INPUT, ...)
+          - pattern: $DB.execute(..., $INPUT)
+      - pattern-not: cursor.execute("...", ...)
+    message: Potential SQL Injection found using dynamic query formatting.
+    severity: ERROR
+    languages: [python]
+
+  - id: offline-javascript-eval-danger
+    pattern: eval(...)
+    message: Use of eval is highly discouraged and introduces severe XSS/RCE vectors.
+    severity: ERROR
+    languages: [javascript, typescript]
+
+  - id: offline-command-injection-subproc
+    patterns:
+      - pattern: subprocess.call($SHELL, shell=True)
+      - pattern-not: subprocess.call("...", shell=True)
+    message: Shell=True used dynamically. High risk of arbitrary Command Injection.
+    severity: WARNING
+    languages: [python]
+
+  - id: offline-javascript-danger-innerhtml
+    patterns:
+      - pattern: $EL.innerHTML = $INPUT
+      - pattern-not: $EL.innerHTML = "..."
+    message: Direct assignment to innerHTML can lead to Cross-Site Scripting (XSS).
+    severity: WARNING
+    languages: [javascript, typescript]
+
+  - id: offline-php-loose-comparison
+    pattern: $X == $Y
+    message: Loose equality comparison in PHP can lead to authentication bypass type juggling vulnerabilities. Use ===.
+    severity: INFO
+    languages: [php]
+
+  - id: offline-csharp-hardcoded-crypto
+    pattern: new System.Security.Cryptography.MD5CryptoServiceProvider()
+    message: MD5 is a weak, collision-vulnerable algorithm. Use SHA256 or better.
+    severity: ERROR
+    languages: [csharp]
+
+  - id: offline-go-command-injection
+    patterns:
+      - pattern: exec.Command($BIN, $ARG, ...)
+      - pattern-not: exec.Command("...", "...", ...)
+    message: Dynamic arguments in exec.Command can lead to Command Injection in Go.
+    severity: WARNING
+    languages: [go]
+
+  - id: offline-java-runtime-exec
+    patterns:
+      - pattern: Runtime.getRuntime().exec($CMD)
+      - pattern-not: Runtime.getRuntime().exec("...")
+    message: Untrusted inputs to Runtime.exec() can lead to Command Injection. Use ProcessBuilder.
+    severity: ERROR
+    languages: [java]
+
+  - id: offline-python-pickle-deserialization
+    pattern: pickle.loads(...)
+    message: Unmarshaling untrusted input with pickle leads to arbitrary code execution. Use JSON instead.
+    severity: ERROR
+    languages: [python]
+
+  - id: offline-generic-hardcoded-aws-key
+    pattern-regex: (?i)(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}
+    message: Hardcoded AWS Access Key identified. Use environment variables or secret managers.
+    severity: ERROR
+    languages: [python, javascript, typescript, java, go, csharp, php]
+
+  - id: offline-js-jwt-none-algorithm
+    patterns:
+      - pattern: jwt.verify($TOKEN, $KEY, { algorithms: ['none'] })
+    message: Allowing the 'none' algorithm in JWT tokens allows attackers to bypass authentication.
+    severity: ERROR
+    languages: [javascript, typescript]

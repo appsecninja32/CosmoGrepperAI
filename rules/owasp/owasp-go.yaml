@@ -1,0 +1,37 @@
+rules:
+  - id: owasp-go-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [go]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              db.Query($QUERY + $X)
+          - pattern: |
+              db.Exec($QUERY + $X)
+
+  - id: owasp-go-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [go]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              exec.Command("sh", "-c", $CMD)
+          - pattern: |
+              exec.Command("bash", "-c", $CMD)
+
+  - id: owasp-go-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [go]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $VAR := "SECRET"
+          - pattern: |
+              $VAR := "PASSWORD"
+          - pattern: |
+              $VAR := "API_KEY"
+          - pattern: |
+              $VAR := "TOKEN"

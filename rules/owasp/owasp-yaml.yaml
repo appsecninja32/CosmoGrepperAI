@@ -1,0 +1,32 @@
+rules:
+  - id: owasp-yaml-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [yaml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              secret: $VAL
+          - pattern: |
+              password: $VAL
+          - pattern: |
+              api_key: $VAL
+          - pattern: |
+              token: $VAL
+
+  - id: owasp-yaml-hostpath
+    message: "Kubernetes hostPath mount detected"
+    severity: ERROR
+    languages: [yaml]
+    patterns:
+      - pattern: |
+          hostPath:
+            path: $P
+
+  - id: owasp-yaml-world-readable
+    message: "Overly permissive file mode"
+    severity: WARNING
+    languages: [yaml]
+    patterns:
+      - pattern: |
+          mode: "0777"

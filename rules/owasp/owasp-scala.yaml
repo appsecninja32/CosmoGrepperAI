@@ -1,0 +1,46 @@
+rules:
+  - id: owasp-rust-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [rust]
+    patterns:
+      - pattern-either:
+          - pattern: format!($QUERY, $X)
+          - pattern: $QUERY.to_string() + $X
+
+  - id: owasp-rust-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [rust]
+    patterns:
+      - pattern-either:
+          - pattern: std::process::Command::new($CMD)
+          - pattern: Command::new($CMD)
+
+  - id: owasp-rust-weak-hash
+    message: "Use of weak hash function (MD5/SHA1)"
+    severity: WARNING
+    languages: [rust]
+    patterns:
+      - pattern-either:
+          - pattern: md5::compute($X)
+          - pattern: sha1::Sha1::new()
+
+  - id: owasp-rust-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [rust]
+    patterns:
+      - pattern-either:
+          - pattern: let $VAR = "SECRET"
+          - pattern: let $VAR = "PASSWORD"
+          - pattern: let $VAR = "API_KEY"
+          - pattern: let $VAR = "TOKEN"
+
+  - id: owasp-rust-debug-logging
+    message: "Debug logging left enabled"
+    severity: WARNING
+    languages: [rust]
+    patterns:
+      - pattern-either:
+          - pattern: println!("DEBUG" ...)

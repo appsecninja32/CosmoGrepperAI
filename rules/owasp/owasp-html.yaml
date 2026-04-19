@@ -1,0 +1,59 @@
+rules:
+  - id: owasp-html-inline-event-handler
+    message: "Inline event handlers can lead to XSS"
+    severity: ERROR
+    languages: [html]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              <$_ onclick=$X>
+          - pattern: |
+              <$_ onmouseover=$X>
+          - pattern: |
+              <$_ onload=$X>
+          - pattern: |
+              <$_ onerror=$X>
+
+  - id: owasp-html-javascript-uri
+    message: "Use of javascript: URI can lead to XSS"
+    severity: ERROR
+    languages: [html]
+    pattern: |
+      <a href="javascript:$X">
+
+  - id: owasp-html-unsafe-script-src
+    message: "Script tag with insecure or dynamic source"
+    severity: ERROR
+    languages: [html]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              <script src="http://$X">
+          - pattern: |
+              <script src=$X>
+
+  - id: owasp-html-inline-script
+    message: "Inline script block may be vulnerable to XSS"
+    severity: WARNING
+    languages: [html]
+    pattern: |
+      <script>$X</script>
+
+  - id: owasp-html-insecure-form-action
+    message: "Form submitted over insecure HTTP"
+    severity: WARNING
+    languages: [html]
+    pattern: |
+      <form action="http://$X">
+
+  - id: owasp-html-target-blank-no-rel
+    message: "Link with target=\"_blank\" missing rel=\"noopener\" or rel=\"noreferrer\""
+    severity: WARNING
+    languages: [html]
+    patterns:
+      - pattern: |
+          <a href=$URL target="_blank">
+      - pattern-not: |
+          <a href=$URL target="_blank" rel="noopener">
+      - pattern-not: |
+          <a href=$URL target="_blank" rel="noreferrer">

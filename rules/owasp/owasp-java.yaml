@@ -1,0 +1,48 @@
+rules:
+  - id: owasp-java-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [java]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $STMT.executeQuery($QUERY + $X);
+          - pattern: |
+              $STMT.executeUpdate($QUERY + $X);
+
+  - id: owasp-java-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [java]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              Runtime.getRuntime().exec($CMD);
+          - pattern: |
+              new ProcessBuilder($CMD, ...).start();
+
+  - id: owasp-java-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [java]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              String $VAR = "SECRET";
+          - pattern: |
+              String $VAR = "PASSWORD";
+          - pattern: |
+              String $VAR = "API_KEY";
+          - pattern: |
+              String $VAR = "TOKEN";
+
+  - id: owasp-java-debug-logging
+    message: "Debug logging left in code"
+    severity: WARNING
+    languages: [java]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              System.out.println("DEBUG");
+          - pattern: |
+              logger.debug($MSG);

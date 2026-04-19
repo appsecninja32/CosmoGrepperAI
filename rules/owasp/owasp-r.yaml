@@ -1,0 +1,83 @@
+rules:
+  - id: owasp-r-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [r]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              paste0($QUERY, $X)
+          - pattern: |
+              sprintf($QUERY, $X)
+          - pattern: |
+              DBI::dbGetQuery($CONN, paste0($QUERY, $X))
+
+  - id: owasp-r-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [r]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              system($CMD)
+          - pattern: |
+              system2($CMD)
+          - pattern: |
+              shell($CMD)
+
+  - id: owasp-r-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: ERROR
+    languages: [r]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $VAR <- "SECRET"
+          - pattern: |
+              $VAR <- "PASSWORD"
+          - pattern: |
+              $VAR <- "API_KEY"
+          - pattern: |
+              $VAR <- "TOKEN"
+
+  - id: owasp-r-weak-hash
+    message: "Use of weak hash function (MD5/SHA1)"
+    severity: WARNING
+    languages: [r]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              digest::digest($X, algo="md5")
+          - pattern: |
+              digest::digest($X, algo="sha1")
+
+  - id: owasp-r-debug-print
+    message: "Debug logging left enabled"
+    severity: WARNING
+    languages: [r]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              print("DEBUG")
+          - pattern: |
+              cat("DEBUG", $X)
+          - pattern: |
+              message("DEBUG")
+
+  - id: owasp-r-insecure-http
+    message: "Insecure HTTP URL used instead of HTTPS"
+    severity: WARNING
+    languages: [r]
+    pattern: |
+      "http://"
+
+  - id: owasp-r-dangerous-eval-parse
+    message: "Use of eval(parse()) can lead to code execution vulnerabilities"
+    severity: ERROR
+    languages: [r]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              eval(parse(text=$X))
+          - pattern: |
+              eval($X)

@@ -1,0 +1,65 @@
+rules:
+  - id: owasp-xml-external-entity
+    message: "XML External Entity (XXE) detected"
+    severity: ERROR
+    languages: [xml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              <!ENTITY $X SYSTEM $Y>
+          - pattern: |
+              <!ENTITY $X PUBLIC $Y $Z>
+
+  - id: owasp-xml-doctype-declaration
+    message: "DOCTYPE declaration may enable XXE"
+    severity: WARNING
+    languages: [xml]
+    pattern: |
+      <!DOCTYPE $X>
+
+  - id: owasp-xml-insecure-http-reference
+    message: "Insecure HTTP reference inside XML"
+    severity: WARNING
+    languages: [xml]
+    pattern: |
+      "http://$X"
+
+  - id: owasp-xml-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [xml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              <password>$X</password>
+          - pattern: |
+              <secret>$X</secret>
+          - pattern: |
+              <token>$X</token>
+          - pattern: |
+              <apiKey>$X</apiKey>
+
+  - id: owasp-xml-debug-logging-flag
+    message: "Debug flag enabled in XML configuration"
+    severity: WARNING
+    languages: [xml]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              <debug>true</debug>
+          - pattern: |
+              <log-level>debug</log-level>
+
+  - id: owasp-xml-dangerous-processing-instruction
+    message: "XML processing instruction may be unsafe"
+    severity: ERROR
+    languages: [xml]
+    pattern: |
+      <?xml-stylesheet $X?>
+
+  - id: owasp-xml-unbounded-entity
+    message: "Potential Billion Laughs attack (entity expansion)"
+    severity: ERROR
+    languages: [xml]
+    pattern: |
+      <!ENTITY $X "$Y$Y$Y$Y$Y$Y$Y$Y$Y$Y">

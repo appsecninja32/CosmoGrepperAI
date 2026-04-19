@@ -1,0 +1,39 @@
+rules:
+  - id: owasp-php-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [php]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              mysqli_query($CONN, $QUERY . $X)
+          - pattern: |
+              $DB->query($QUERY . $X)
+
+  - id: owasp-php-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [php]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              exec($CMD)
+          - pattern: |
+              shell_exec($CMD)
+          - pattern: |
+              system($CMD)
+
+  - id: owasp-php-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [php]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $VAR = "SECRET";
+          - pattern: |
+              $VAR = "PASSWORD";
+          - pattern: |
+              $VAR = "API_KEY";
+          - pattern: |
+              $VAR = "TOKEN";

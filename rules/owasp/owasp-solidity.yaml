@@ -1,0 +1,37 @@
+rules:
+  - id: owasp-solidity-tx-origin
+    message: "Use of tx.origin for authorization"
+    severity: ERROR
+    languages: [solidity]
+    patterns:
+      - pattern: require(tx.origin == $X)
+
+  - id: owasp-solidity-call-injection
+    message: "Use of low-level call() can be dangerous"
+    severity: ERROR
+    languages: [solidity]
+    patterns:
+      - pattern: $X.call($Y)
+
+  - id: owasp-solidity-hardcoded-secret
+    message: "Hardcoded secret or private key"
+    severity: ERROR
+    languages: [solidity]
+    patterns:
+      - pattern-either:
+          - pattern: string $VAR = "SECRET"
+          - pattern: string $VAR = "PRIVATE_KEY"
+
+  - id: owasp-solidity-reentrancy
+    message: "Possible reentrancy vulnerability"
+    severity: ERROR
+    languages: [solidity]
+    patterns:
+      - pattern: $X.call.value($Y)()
+
+  - id: owasp-solidity-debug-logging
+    message: "Debug logging left enabled"
+    severity: WARNING
+    languages: [solidity]
+    patterns:
+      - pattern: emit Debug($X)

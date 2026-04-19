@@ -1,0 +1,26 @@
+rules:
+  - id: owasp-cpp-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [cpp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              std::string $VAR = "SECRET";
+          - pattern: |
+              std::string $VAR = "PASSWORD";
+          - pattern: |
+              std::string $VAR = "API_KEY";
+          - pattern: |
+              std::string $VAR = "TOKEN";
+
+  - id: owasp-cpp-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [cpp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              system($CMD);
+          - pattern: |
+              std::system($CMD);

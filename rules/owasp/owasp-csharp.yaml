@@ -1,0 +1,48 @@
+rules:
+  - id: owasp-csharp-sql-injection
+    message: "Possible SQL injection via string concatenation"
+    severity: ERROR
+    languages: [csharp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $CMD.CommandText = $QUERY + $X;
+          - pattern: |
+              $CMD.CommandText = string.Format($QUERY, $X);
+
+  - id: owasp-csharp-command-exec
+    message: "Command execution with dynamic input"
+    severity: ERROR
+    languages: [csharp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              System.Diagnostics.Process.Start($CMD);
+          - pattern: |
+              System.Diagnostics.Process.Start("cmd.exe", "/C " + $CMD);
+
+  - id: owasp-csharp-hardcoded-secret
+    message: "Possible hardcoded secret or credential"
+    severity: WARNING
+    languages: [csharp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              string $VAR = "SECRET";
+          - pattern: |
+              string $VAR = "PASSWORD";
+          - pattern: |
+              string $VAR = "API_KEY";
+          - pattern: |
+              string $VAR = "TOKEN";
+
+  - id: owasp-csharp-debug-logging
+    message: "Debug logging left in code"
+    severity: WARNING
+    languages: [csharp]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              Console.WriteLine("DEBUG");
+          - pattern: |
+              _logger.LogDebug($MSG);

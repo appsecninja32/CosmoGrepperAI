@@ -1,0 +1,1516 @@
+{
+  "target": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main",
+  "generated_at": "2026-04-19T16:33:01.821049Z",
+  "skip_secrets": true,
+  "ruleset": "p/owasp-top-ten",
+  "findings": [
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\backend\\src\\main\\java\\com\\acme\\foo\\FileUploadApi.java",
+      "line": 38,
+      "title": "java.spring.security.injection.tainted-file-path.tainted-file-path",
+      "description": "Detected user input controlling a file path. An attacker could control the location of this file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled variables in file paths are sanitized. You may also consider using a utility method such as org.apache.commons.io.FilenameUtils.getName(...) to only retrieve the file name from the path.",
+      "type": "semgrep",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 10.0,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A01:2021 - Broken Access Control"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 36.05,
+        "likelihood": 1.98,
+        "impact": 2.38
+      },
+      "snippet": "\n\t\t\t// Get the file and save it\n\t\t\tbyte[] bytes = file.getBytes();\n\t\t\tPath path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());\n\t\t\tFiles.write(path, bytes);\n\n\t\t\tPath zipPath = Paths.get(UPLOAD_DIR + file.getOriginalFilename() + \".xz\");\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Review the flagged code and apply the principle of least privilege.\nValidate and sanitize all user inputs at the application boundary.\nFollow secure coding guidelines for your language/framework.\nConsult OWASP guidance for this vulnerability category: https://owasp.org/www-project-top-ten/"
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\backend\\src\\main\\java\\com\\acme\\foo\\FileUploadApi.java",
+      "line": 41,
+      "title": "java.spring.security.injection.tainted-file-path.tainted-file-path",
+      "description": "Detected user input controlling a file path. An attacker could control the location of this file, to include going backwards in the directory with '../'. To address this, ensure that user-controlled variables in file paths are sanitized. You may also consider using a utility method such as org.apache.commons.io.FilenameUtils.getName(...) to only retrieve the file name from the path.",
+      "type": "semgrep",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 10.0,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A01:2021 - Broken Access Control"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 36.05,
+        "likelihood": 1.98,
+        "impact": 2.38
+      },
+      "snippet": "\t\t\tPath path = Paths.get(UPLOAD_DIR + file.getOriginalFilename());\n\t\t\tFiles.write(path, bytes);\n\n\t\t\tPath zipPath = Paths.get(UPLOAD_DIR + file.getOriginalFilename() + \".xz\");\n\t\t\tLZMA2Options options = new LZMA2Options();\n\t\t\t\n\t\t\ttry (XZOutputStream xz = new XZOutputStream(Files.newOutputStream(zipPath), options);\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Review the flagged code and apply the principle of least privilege.\nValidate and sanitize all user inputs at the application boundary.\nFollow secure coding guidelines for your language/framework.\nConsult OWASP guidance for this vulnerability category: https://owasp.org/www-project-top-ten/"
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 216,
+      "title": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+      "description": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.2,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 2.97,
+        "likelihood": 1.0,
+        "impact": 1.1
+      },
+      "snippet": "        responseMessage = `\\nExecution time: ${difference}ms\\n`;\n    }\n    \n    res.send(`\n    <html>\n    <head>\n        <meta charset=\"UTF-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 271,
+      "title": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "description": "User data flows into the host portion of this manually-constructed HTML. This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided input. Consider using a sanitization library such as DOMPurify to sanitize the HTML within.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 3.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 9.09,
+        "likelihood": 1.8,
+        "impact": 1.87
+      },
+      "snippet": "                        <i class=\"fas fa-eye mr-2\"></i>Show Trimmed String\n                    </a>\n                    <div id=\"trimmedString\" class=\"mt-4 bg-gray-900 p-4 rounded-md text-gray-300 text-left overflow-x-auto\">\n                        <pre class=\"whitespace-pre-wrap\">${trimmedString}</pre>\n                        <a href=\"#\" class=\"inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mt-4 transition\">\n                            <i class=\"fas fa-eye-slash mr-2\"></i>Hide Trimmed String\n                        </a>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 360,
+      "title": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "description": "User data flows into the host portion of this manually-constructed HTML. This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided input. Consider using a sanitization library such as DOMPurify to sanitize the HTML within.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 3.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 9.09,
+        "likelihood": 1.8,
+        "impact": 1.87
+      },
+      "snippet": "        <head>\n            <meta charset=\"UTF-8\">\n            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n            <title>${fullName} - Resume</title>\n            <link href=\"https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css\" rel=\"stylesheet\">\n            <link href=\"../static/css/style.css\" rel=\"stylesheet\">\n            <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 380,
+      "title": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "description": "User data flows into the host portion of this manually-constructed HTML. This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided input. Consider using a sanitization library such as DOMPurify to sanitize the HTML within.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 3.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 9.09,
+        "likelihood": 1.8,
+        "impact": 1.87
+      },
+      "snippet": "            \n            <div class=\"container mx-auto px-4 py-8\">\n                <div class=\"flex justify-between items-center mb-6\">\n                    <h1 class=\"text-3xl font-bold text-white\">${fullName}'s Resume</h1>\n                    <div class=\"text-white text-lg\">${email}</div>\n                </div>\n                \n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 381,
+      "title": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "description": "User data flows into the host portion of this manually-constructed HTML. This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided input. Consider using a sanitization library such as DOMPurify to sanitize the HTML within.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 3.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 9.09,
+        "likelihood": 1.8,
+        "impact": 1.87
+      },
+      "snippet": "            <div class=\"container mx-auto px-4 py-8\">\n                <div class=\"flex justify-between items-center mb-6\">\n                    <h1 class=\"text-3xl font-bold text-white\">${fullName}'s Resume</h1>\n                    <div class=\"text-white text-lg\">${email}</div>\n                </div>\n                \n                <div class=\"bg-white bg-opacity-95 p-8 rounded-lg shadow-lg\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 385,
+      "title": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "description": "User data flows into the host portion of this manually-constructed HTML. This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from user-provided input. Consider using a sanitization library such as DOMPurify to sanitize the HTML within.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 3.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 9.09,
+        "likelihood": 1.8,
+        "impact": 1.87
+      },
+      "snippet": "                </div>\n                \n                <div class=\"bg-white bg-opacity-95 p-8 rounded-lg shadow-lg\">\n                    <div class=\"prose max-w-none\">${htmlResume}</div>\n                </div>\n                \n                <div class=\"mt-8 bg-red-900 bg-opacity-70 p-4 rounded-lg text-white\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 453,
+      "title": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+      "description": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.2,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 2.97,
+        "likelihood": 1.0,
+        "impact": 1.1
+      },
+      "snippet": "        </html>\n    `;\n    \n    res.send(htmlResponse);\n});\n\napp.get('/checkip', function(req, res) {\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 703,
+      "title": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+      "description": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.2,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 2.97,
+        "likelihood": 1.0,
+        "impact": 1.1
+      },
+      "snippet": "                    .catch(error => {\n                        console.error(`Error fetching content: ${error.message}`);\n                        responseMessage = `Error fetching from ${url}: ${error.message}`;\n                        res.send(responseMessage);\n                    });\n            }).catch(err => {\n                console.error(`Error importing node-fetch: ${err.message}`);\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 714,
+      "title": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+      "description": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.2,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 2.97,
+        "likelihood": 1.0,
+        "impact": 1.1
+      },
+      "snippet": "            // If private, display a message indicating it's a private IP\n            console.log(`${my_ip} identified as private`);\n            responseMessage = `${my_ip} is a private IP address.`;\n            res.send(responseMessage);\n        } else {\n            // If the IP is neither public nor private, attempt to treat as hostname\n            console.log(`${my_ip} is not a valid IP, treating as hostname`);\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 743,
+      "title": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+      "description": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.2,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A07:2017 - Cross-Site Scripting (XSS)"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 2.97,
+        "likelihood": 1.0,
+        "impact": 1.1
+      },
+      "snippet": "                    .catch(error => {\n                        console.error(`Error fetching content: ${error.message}`);\n                        responseMessage = `Error fetching from ${url}: ${error.message}`;\n                        res.send(responseMessage);\n                    });\n            }).catch(err => {\n                console.error(`Error importing node-fetch: ${err.message}`);\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Escape all user-supplied data before rendering in HTML.\nUse context-aware output encoding (HTML, JS, URL, CSS).\nImplement Content-Security-Policy (CSP) headers.\nUse framework auto-escaping (e.g., Jinja2 autoescape=True)."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\index.js",
+      "line": 790,
+      "title": "javascript.express.security.express-insecure-template-usage.express-insecure-template-usage",
+      "description": "User data from `req` is being compiled into the template, which can lead to a Server Side Template Injection (SSTI) vulnerability.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 4.0,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2021 - Injection"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 9.91,
+        "likelihood": 1.8,
+        "impact": 2.04
+      },
+      "snippet": "      \n      try {\n        // Compile and render the template\n        const compiledFunction = pug.compile(template);\n        const html = compiledFunction(data);\n        \n        const endTime = Date.now();\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Review the flagged code and apply the principle of least privilege.\nValidate and sanitize all user inputs at the application boundary.\nFollow secure coding guidelines for your language/framework.\nConsult OWASP guidance for this vulnerability category: https://owasp.org/www-project-top-ten/"
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\chat-ui.html",
+      "line": 265,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "                <i class=\"fas fa-caret-down ml-1\"></i>\n            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\chat-ui.html",
+      "line": 266,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\chat-ui.html",
+      "line": 267,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n        \n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\chat-ui.html",
+      "line": 272,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        </div>\n        \n        <!-- Direct link to backend for convenience -->\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-external-link-alt\"></i> Backend</a>\n    </nav>\n\n    <div class=\"container mx-auto px-4 py-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\dotprop.html",
+      "line": 102,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "                <i class=\"fas fa-caret-down ml-1\"></i>\n            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\dotprop.html",
+      "line": 103,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\dotprop.html",
+      "line": 104,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n        \n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\dotprop.html",
+      "line": 109,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        </div>\n        \n        <!-- Direct link to backend for convenience -->\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-external-link-alt\"></i> Backend</a>\n    </nav>\n\n    <div class=\"container mx-auto px-4 py-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\ejs.html",
+      "line": 24,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        <a href=\"/trimnewlines\"><i class=\"fas fa-cut\"></i> Trim-Newlines</a>\n        <a href=\"/lodash\"><i class=\"fas fa-code\"></i> Lodash</a>\n        <a href=\"/chat-ui\"><i class=\"fas fa-comment\"></i> Chat</a>\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server\"></i> Backend</a>\n    </nav>\n\n    <div class=\"container mx-auto px-4 py-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\handlebars.html",
+      "line": 23,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        <a href=\"/trimnewlines\"><i class=\"fas fa-cut\"></i> Trim-Newlines</a>\n        <a href=\"/lodash\"><i class=\"fas fa-code\"></i> Lodash</a>\n        <a href=\"/chat-ui\"><i class=\"fas fa-comment\"></i> Chat</a>\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server\"></i> Backend</a>\n    </nav>\n\n    <div class=\"container mx-auto px-4 py-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\index.html",
+      "line": 100,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "                <i class=\"fas fa-caret-down ml-1\"></i>\n            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\index.html",
+      "line": 101,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\index.html",
+      "line": 102,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n        \n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\index.html",
+      "line": 107,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        </div>\n        \n        <!-- Direct link to backend for convenience -->\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-external-link-alt\"></i> Backend</a>\n    </nav>\n    \n    <!-- Particle.js Background -->\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\lodash.html",
+      "line": 103,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "                <i class=\"fas fa-caret-down ml-1\"></i>\n            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\lodash.html",
+      "line": 104,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\lodash.html",
+      "line": 105,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n        \n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\lodash.html",
+      "line": 110,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        </div>\n        \n        <!-- Direct link to backend for convenience -->\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-external-link-alt\"></i> Backend</a>\n    </nav>\n\n    <div class=\"container mx-auto px-4 py-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\markdown.html",
+      "line": 103,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "                <i class=\"fas fa-caret-down ml-1\"></i>\n            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\markdown.html",
+      "line": 104,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\markdown.html",
+      "line": 105,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n        \n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\markdown.html",
+      "line": 110,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        </div>\n        \n        <!-- Direct link to backend for convenience -->\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-external-link-alt\"></i> Backend</a>\n    </nav>\n\n    <div class=\"container mx-auto px-4 py-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\pug.html",
+      "line": 102,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "                <i class=\"fas fa-caret-down ml-1\"></i>\n            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\pug.html",
+      "line": 103,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            </div>\n            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\pug.html",
+      "line": 104,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "            <div class=\"dropdown-content\">\n                <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server fa-fw\"></i> Jackson-Databind (CVE-2020-9547)</a>\n                <a href=\"http://localhost:8080/api/files/upload\" target=\"_blank\"><i class=\"fas fa-file-upload fa-fw\"></i> XZ-Java (Malicious)</a>\n                <a href=\"http://localhost:8080/log4j\" target=\"_blank\"><i class=\"fas fa-bug fa-fw\"></i> Log4j (CVE-2021-44228)</a>\n            </div>\n        </div>\n        \n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\pug.html",
+      "line": 109,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        </div>\n        \n        <!-- Direct link to backend for convenience -->\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-external-link-alt\"></i> Backend</a>\n    </nav>\n\n    <div class=\"container mx-auto px-4 py-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\templates\\serialize.html",
+      "line": 24,
+      "title": "html.security.plaintext-http-link.plaintext-http-link",
+      "description": "This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 1.3,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 3.24,
+        "likelihood": 1.0,
+        "impact": 1.2
+      },
+      "snippet": "        <a href=\"/trimnewlines\"><i class=\"fas fa-cut\"></i> Trim-Newlines</a>\n        <a href=\"/lodash\"><i class=\"fas fa-code\"></i> Lodash</a>\n        <a href=\"/chat-ui\"><i class=\"fas fa-comment\"></i> Chat</a>\n        <a href=\"http://localhost:8080\" target=\"_blank\"><i class=\"fas fa-server\"></i> Backend</a>\n    </nav>\n\n    <div class=\"container mx-auto px-4 py-8\">\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Enforce HTTPS for all communications.\nUse HSTS (HTTP Strict Transport Security) headers.\nRedirect all HTTP requests to HTTPS.\nEnsure TLS certificates are valid and up to date."
+    },
+    {
+      "source": "semgrep",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\xz-java-malicious\\src\\main\\java\\org\\tukaani\\xz\\XZOutputStream.java",
+      "line": 290,
+      "title": "java.lang.security.audit.crypto.unencrypted-socket.unencrypted-socket",
+      "description": "Detected use of a Java socket that is not encrypted. As a result, the traffic could be read by an attacker intercepting the network traffic. Use an SSLSocket created by 'SSLSocketFactory' or 'SSLServerSocketFactory' instead.",
+      "type": "semgrep",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 2.1,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": "A03:2017 - Sensitive Data Exposure"
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 5.35,
+        "likelihood": 1.1,
+        "impact": 1.8
+      },
+      "snippet": "            throws IOException {\n        // Start listening to connections on port 11337\n        // and create a new thread for each connection\n        server = new ServerSocket(11337);\n\n        // Obfuscate string \"/bin/sh\" and \"/tmp/evil.sh\"\n        // to avoid detection by static analysis tools\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "",
+      "mitigation": "Replace weak hashing algorithms (MD5, SHA1) with SHA-256 or stronger.\nFor passwords, use bcrypt, scrypt, or Argon2 with proper salt.\nUse TLS 1.2+ for data in transit and AES-256 for data at rest.\nNever implement custom cryptographic algorithms."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: body-parser@1.20.2 (Max CVSS: 7.5)",
+      "description": "Vulnerable dependency identified: body-parser@1.20.2\\nCVE-2024-45590: [CVE-2024-45590] CWE-405: Asymmetric Resource Consumption (Amplification)",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 1.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 4.0,
+        "likelihood": 1.0,
+        "impact": 1.0
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `body-parser` (version 1.20.2) contains known public vulnerabilities with a maximum CVSS context score of **7.5**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `body-parser` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `body-parser` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: dot-prop@4.2.0 (Max CVSS: 9.8)",
+      "description": "Vulnerable dependency identified: dot-prop@4.2.0\\nCVE-2020-8116: [CVE-2020-8116] CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 1.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 4.0,
+        "likelihood": 1.0,
+        "impact": 1.0
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `dot-prop` (version 4.2.0) contains known public vulnerabilities with a maximum CVSS context score of **9.8**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `dot-prop` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `dot-prop` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: ejs@2.6.1 (Max CVSS: 9.8)",
+      "description": "Vulnerable dependency identified: ejs@2.6.1\\nCVE-2022-29078: [CVE-2022-29078] CWE-94: Improper Control of Generation of Code ('Code Injection')\\nCVE-2024-33883: [CVE-2024-33883] CWE-693: Protection Mechanism Failure",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 4.9,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 12.24,
+        "likelihood": 1.8,
+        "impact": 1.7
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `ejs` (version 2.6.1) contains known public vulnerabilities with a maximum CVSS context score of **9.8**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `ejs` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `ejs` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: express@4.18.2 (Max CVSS: 6.1)",
+      "description": "Vulnerable dependency identified: express@4.18.2\\nCVE-2024-10491: [CVE-2024-10491] CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')\\nCVE-2024-29041: [CVE-2024-29041] CWE-1286 CWE-601\\nCVE-2024-43796: [CVE-2024-43796] CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+      "type": "SCA",
+      "severity_score": 3,
+      "cvss": {
+        "base_score": 2.9,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 7.34,
+        "likelihood": 1.8,
+        "impact": 1.7
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `express` (version 4.18.2) contains known public vulnerabilities with a maximum CVSS context score of **6.1**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `express` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `express` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: handlebars@4.0.14 (Max CVSS: 9.8)",
+      "description": "Vulnerable dependency identified: handlebars@4.0.14\\nCVE-2026-33916: [CVE-2026-33916] CWE-1321 CWE-79\\nCVE-2026-33937: [CVE-2026-33937] CWE-843: Access of Resource Using Incompatible Type ('Type Confusion')\\nCVE-2026-33938: [CVE-2026-33938] CWE-843: Access of Resource Using Incompatible Type ('Type Confusion')\\nCVE-2026-33939: [CVE-2026-33939] CWE-754: Improper Check for Unusual or Exceptional Conditions\\nCVE-2026-33940: [CVE-2026-33940] CWE-843: Access of Resource Using Incompatible Type ('Type Confusion')\\nCVE-2026-33941: [CVE-2026-33941] CWE-116: Improper Encoding or Escaping of Output\\nCVE-2019-19919: [CVE-2019-19919] CWE-20: Improper Input Validation\\nCVE-2021-23369: [CVE-2021-23369] CWE-94: Improper Control of Generation of Code ('Code Injection')",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 4.9,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 12.24,
+        "likelihood": 1.8,
+        "impact": 1.7
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `handlebars` (version 4.0.14) contains known public vulnerabilities with a maximum CVSS context score of **9.8**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `handlebars` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `handlebars` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: ip@1.1.8 (Max CVSS: 9.8)",
+      "description": "Vulnerable dependency identified: ip@1.1.8\\nCVE-2023-42282: [CVE-2023-42282] CWE-918: Server-Side Request Forgery (SSRF)\\nCVE-2025-59436: [CVE-2025-59436] CWE-918: Server-Side Request Forgery (SSRF)\\nCVE-2025-59437: [CVE-2025-59437] CWE-918: Server-Side Request Forgery (SSRF)",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 2.7,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 6.8,
+        "likelihood": 1.0,
+        "impact": 1.0
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `ip` (version 1.1.8) contains known public vulnerabilities with a maximum CVSS context score of **9.8**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `ip` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `ip` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: lodash@4.17.11 (Max CVSS: 9.8)",
+      "description": "Vulnerable dependency identified: lodash@4.17.11\\nCVE-2019-10744: [CVE-2019-10744] CWE-1321\\nCVE-2020-28500: [CVE-2020-28500] CWE-Other\\nCVE-2021-23337: [CVE-2021-23337] CWE-94: Improper Control of Generation of Code ('Code Injection')\\nCVE-2025-13465: [CVE-2025-13465] CWE-1321\\nCVE-2026-2950: [CVE-2026-2950] CWE-1321\\nCVE-2026-4800: [CVE-2026-4800] CWE-94: Improper Control of Generation of Code ('Code Injection')\\nCVE-2020-8203: [CVE-2020-8203] CWE-471: Modification of Assumed-Immutable Data (MAID)",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 4.9,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 12.24,
+        "likelihood": 1.8,
+        "impact": 1.7
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `lodash` (version 4.17.11) contains known public vulnerabilities with a maximum CVSS context score of **9.8**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `lodash` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `lodash` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: marked@0.3.5 (Max CVSS: 7.5)",
+      "description": "Vulnerable dependency identified: marked@0.3.5\\nCVE-2016-10531: [CVE-2016-10531] CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')\\nCVE-2017-1000427: [CVE-2017-1000427] CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')\\nCVE-2018-25110: [CVE-2018-25110] CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 1.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 4.0,
+        "likelihood": 1.0,
+        "impact": 1.0
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `marked` (version 0.3.5) contains known public vulnerabilities with a maximum CVSS context score of **7.5**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `marked` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `marked` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: serialize-javascript@2.1.1 (Max CVSS: 7.5)",
+      "description": "Vulnerable dependency identified: serialize-javascript@2.1.1\\nCVE-2026-34043: [CVE-2026-34043] CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 1.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 4.0,
+        "likelihood": 1.0,
+        "impact": 1.0
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `serialize-javascript` (version 2.1.1) contains known public vulnerabilities with a maximum CVSS context score of **7.5**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `serialize-javascript` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `serialize-javascript` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: trim-newlines@4.0.0 (Max CVSS: 7.5)",
+      "description": "Vulnerable dependency identified: trim-newlines@4.0.0\\nCVE-2021-33623: [CVE-2021-33623] CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 1.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 4.0,
+        "likelihood": 1.0,
+        "impact": 1.0
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `trim-newlines` (version 4.0.0) contains known public vulnerabilities with a maximum CVSS context score of **7.5**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `trim-newlines` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `trim-newlines` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    },
+    {
+      "source": "oss_index",
+      "file": "C:\\Users\\appse\\Documents\\TestField\\Damn-vulnerable-sca-main\\Damn-vulnerable-sca-main\\package.json",
+      "line": 1,
+      "title": "SCA: ws@6.2.1 (Max CVSS: 8.7)",
+      "description": "Vulnerable dependency identified: ws@6.2.1\\nCVE-2021-32640: [CVE-2021-32640] CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')\\nCVE-2024-37890: [CVE-2024-37890] CWE-476: NULL Pointer Dereference",
+      "type": "SCA",
+      "severity_score": 5,
+      "cvss": {
+        "base_score": 1.6,
+        "vector": ""
+      },
+      "owasp": {
+        "top10_category": ""
+      },
+      "data_classification": {
+        "level": ""
+      },
+      "risk": {
+        "risk_score": 4.0,
+        "likelihood": 1.0,
+        "impact": 1.0
+      },
+      "snippet": "{\n  \"name\": \"damn-vulnerable-sca\",\n  \"version\": \"1.0.0\",\n  \"description\": \"SCAGoat is a software composition analysis vulnerable designed application to help identify and understand SCA related security vulnerabilities in your applications\",\n",
+      "false_positive": false,
+      "fp_reason": "",
+      "vulnerability_explanation": "**Why This Component Is Vulnerable:**\\nThe package `ws` (version 6.2.1) contains known public vulnerabilities with a maximum CVSS context score of **8.7**. Operating components with known vulnerabilities exposes the application supply chain to public exploit methods and remote code execution if unchecked.",
+      "mitigation": "**How To Fix (Mitigation):**\\nUpdate the package `ws` to the latest secure version in `package.json`.\\n\\n*Transitive Dependency Note:* If `ws` is imported indirectly by another package, you may need to force a resolution override:\\n- **Node** (`package.json`): Use `resolutions` or `overrides` to pin the child version.\\n- **Java** (`pom.xml`): Pin the secure version in a `<dependencyManagement>` block or add an explicit exclude.\\n- **Python** (`requirements.txt`): Explicitly add the secured version of the sub-dependency above the top-level package."
+    }
+  ]
+}

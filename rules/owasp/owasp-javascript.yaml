@@ -1,0 +1,51 @@
+rules:
+  - id: owasp-js-hardcoded-secret
+    message: Possible hardcoded secret or credential
+    severity: WARNING
+    languages: [javascript]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              const $VAR = "SECRET"
+          - pattern: |
+              const $VAR = "PASSWORD"
+          - pattern: |
+              const $VAR = "API_KEY"
+          - pattern: |
+              const $VAR = "TOKEN"
+
+  - id: owasp-js-debug-logging
+    message: Debug logging left enabled in production code
+    severity: WARNING
+    languages: [javascript]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              console.log("DEBUG", ...)
+          - pattern: |
+              console.debug(...)
+
+  - id: owasp-js-insecure-http
+    message: Insecure HTTP URL used instead of HTTPS
+    severity: WARNING
+    languages: [javascript]
+    pattern: |
+      "http://"
+
+  - id: owasp-js-dangerous-eval
+    message: Use of eval or Function constructor
+    severity: ERROR
+    languages: [javascript]
+    patterns:
+      - pattern-either:
+          - pattern: |
+              eval($X)
+          - pattern: |
+              new Function($X)
+
+  - id: owasp-js-dom-innerhtml
+    message: Assignment to innerHTML can lead to XSS
+    severity: ERROR
+    languages: [javascript]
+    pattern: |
+      $EL.innerHTML = $X
