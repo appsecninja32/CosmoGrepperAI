@@ -33,8 +33,13 @@ def run_semgrep_json(path, ruleset):
         # Local ruleset must be a simple filename to prevent traversal/injection
         if not re.fullmatch(r"[A-Za-z0-9._\-]+", ruleset):
             return {"results": [], "error": "Invalid local ruleset name"}
-        candidate = (rules_dir / ruleset).resolve()
-        if candidate.parent != rules_dir:
+        try:
+            candidate = (rules_dir / ruleset).resolve(strict=True)
+        except Exception:
+            return {"results": [], "error": "Invalid local ruleset path"}
+        try:
+            candidate.relative_to(rules_dir)
+        except ValueError:
             return {"results": [], "error": "Invalid local ruleset path"}
         config_val = str(candidate)
 
