@@ -2,6 +2,7 @@ import subprocess
 import json
 from pathlib import Path
 import os
+import re
 import model   # SAFE import, avoids circular import
 
 
@@ -14,28 +15,44 @@ def run_semgrep_json(path, ruleset):
     Executes semgrep with JSON output.
     Returns: Dict with 'results' list and optional 'error' string.
     """
+    try:
+        target_path = str(Path(path).resolve(strict=True))
+    except Exception:
+        return {"results": [], "error": "Invalid target path"}
+
+    BASE_DIR = Path(__file__).resolve().parent
+    rules_dir = (BASE_DIR / "rules").resolve()
+
     # Resolve absolute rules directory if not a public registry (p/...)
     if ruleset.startswith("p/"):
+        # Semgrep registry rulesets like p/owasp-top-ten
+        if not re.fullmatch(r"p/[A-Za-z0-9._/\-]+", ruleset):
+            return {"results": [], "error": "Invalid ruleset format"}
         config_val = ruleset
     else:
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        config_val = os.path.join(BASE_DIR, "rules", ruleset)
+        # Local ruleset must be a simple filename to prevent traversal/injection
+        if not re.fullmatch(r"[A-Za-z0-9._\-]+", ruleset):
+            return {"results": [], "error": "Invalid local ruleset name"}
+        try:
+            candidate = (rules_dir / ruleset).resolve(strict=True)
+        except Exception:
+            return {"results": [], "error": "Invalid local ruleset path"}
+        try:
+            candidate.relative_to(rules_dir)
+        except ValueError:
+            return {"results": [], "error": "Invalid local ruleset path"}
+        config_val = str(candidate)
 
-    # Use list-based arguments for better path safety especially on Windows
-    # We still use shell=True on Windows because semgrep is often a script/shim
-    cmd = ["semgrep", "scan", "--json", "--config", config_val, str(path)]
+    cmd = ["semgrep", "scan", "--json", "--config", config_val, target_path]
 
     # Ensure UTF-8 for Semgrep subprocess on Windows
     env = os.environ.copy()
     env["PYTHONIOENCODING"] = "utf-8"
 
     try:
-        # Use shell=True for Windows compatibility with shims
-        # Use shell=False for Unix/Mac for better signal handling and security
-        is_windows = (os.name == "nt")
         result = subprocess.run(
             cmd,
-            shell=is_windows,
+            shell=False,
             capture_output=True,
             text=True,
             encoding="utf-8",
