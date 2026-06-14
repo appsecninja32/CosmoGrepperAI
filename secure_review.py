@@ -16,10 +16,16 @@ from llm_engine import analyze_false_positives
 from oss_engine import run_oss_scan
 
 def run_secure_review(target_path: str, skip_secrets: bool, ruleset: str, llm_provider: str = "gemini", llm_model: str = "", api_key: str = "", enable_oss: bool = False, oss_token: str = ""):
-    target = Path(target_path)
+    base_dir = Path(__file__).resolve().parent
+    try:
+        target = (base_dir / target_path).resolve(strict=True)
+    except Exception:
+        raise FileNotFoundError(f"Target path not found: {target_path}")
 
-    if not target.exists():
-        raise FileNotFoundError(f"Target path not found: {target}")
+    try:
+        target.relative_to(base_dir)
+    except ValueError:
+        raise PermissionError("Target path is outside the allowed scan directory")
 
     print(f"[+] Running Semgrep on: {target} with ruleset={ruleset}")
     semgrep_results = run_semgrep_json(str(target), ruleset)
